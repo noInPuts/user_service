@@ -17,4 +17,4 @@ FROM openjdk:17-slim
 WORKDIR /usr/src/app
 
 # Copy the JAR file from the build image to this image
-COPY --from=build /usr/src/app/target/user_service-0.0.1-SNAPSHOT.jar .
+COPY --from=build /usr/src/app/target/user_service.jar .
