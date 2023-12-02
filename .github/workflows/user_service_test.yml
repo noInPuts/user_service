@@ -19,5 +19,8 @@ jobs:
       with:
         java-version: '17'  
 
-    - name: Running tests   
-      run: mvn clean test -q
+    - name: Running user service tests
+      run: mvn clean test
+
+    - name: Running pmd:check
+      run: mvn pmd:check
