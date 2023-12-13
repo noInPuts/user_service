@@ -1,14 +1,13 @@
 package cphbusiness.noInPuts.userService.controller;
 
 import cphbusiness.noInPuts.userService.dto.UserDTO;
-import cphbusiness.noInPuts.userService.service.JwtService;
-import cphbusiness.noInPuts.userService.service.UserService;
+import cphbusiness.noInPuts.userService.exception.NotAllowedException;
+import cphbusiness.noInPuts.userService.facade.ServiceFacade;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import net.datafaker.Faker;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -43,15 +41,11 @@ public class UserControllerTests {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
-
-    @MockBean
-    private JwtService jwtService;
+    private ServiceFacade serviceFacade;
 
     @Value("${jwt.secret}")
     private String pKey;
 
-    // TODO: test without cookie and with invalid cookie
     @Test
     public void createUser() throws Exception {
         // Creating faker object
@@ -68,8 +62,7 @@ public class UserControllerTests {
 
         // Mocking the userService.createUser method to return a UserDTO object
         UserDTO userMockObject = new UserDTO(Long.parseLong(jsonRequestMap.get("id").toString()), jsonRequestMap.get("name").toString(), jsonRequestMap.get("email").toString(), jsonRequestMap.get("phoneNumber").toString(), jsonRequestMap.get("address").toString());
-        when(userService.createUser(any(UserDTO.class))).thenReturn(userMockObject);
-        when(jwtService.getUserIdFromToken(any(String.class))).thenReturn(1L);
+        when(serviceFacade.createUser(any(UserDTO.class), any(String.class))).thenReturn(userMockObject);
 
         // Converting the map to a JSON object
         JSONObject jsonObject = new JSONObject(jsonRequestMap);
@@ -116,6 +109,7 @@ public class UserControllerTests {
         String jsonRequestData = jsonObject.toString();
 
         Cookie cookie = getCookie(2L);
+        when(serviceFacade.createUser(any(UserDTO.class), any(String.class))).thenThrow(new NotAllowedException("You are not allowed to create a user with this id"));
 
         this.mockMvc.perform(post("/user/create").content(jsonRequestData).contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8").cookie(cookie))
                 .andExpect(status().isForbidden());
@@ -123,9 +117,7 @@ public class UserControllerTests {
 
     @Test
     public void getUser() throws Exception {
-        when(userService.getUser(any(Long.class))).thenReturn(new UserDTO(1L, "name", "email", "phoneNumber", "address"));
-        when(jwtService.getUserIdFromToken(any(String.class))).thenReturn(1L);
-
+        when(serviceFacade.getUser(any(String.class))).thenReturn(new UserDTO(1L, "name", "email", "phoneNumber", "address"));
         Cookie cookie = getCookie(1L);
 
         this.mockMvc.perform(get("/user").cookie(cookie))
