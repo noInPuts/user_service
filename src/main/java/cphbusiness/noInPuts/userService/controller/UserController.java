@@ -5,8 +5,6 @@ import cphbusiness.noInPuts.userService.dto.UserDTO;
 import cphbusiness.noInPuts.userService.exception.NotAllowedException;
 import cphbusiness.noInPuts.userService.exception.UserNotFoundException;
 import cphbusiness.noInPuts.userService.facade.ServiceFacade;
-import cphbusiness.noInPuts.userService.service.JwtService;
-import cphbusiness.noInPuts.userService.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
