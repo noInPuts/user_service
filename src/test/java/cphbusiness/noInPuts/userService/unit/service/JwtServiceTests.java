@@ -1,5 +1,6 @@
-package cphbusiness.noInPuts.userService.service;
+package cphbusiness.noInPuts.userService.unit.service;
 
+import cphbusiness.noInPuts.userService.service.JwtService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
