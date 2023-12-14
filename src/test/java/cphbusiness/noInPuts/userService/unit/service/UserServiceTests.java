@@ -1,8 +1,9 @@
-package cphbusiness.noInPuts.userService.service;
+package cphbusiness.noInPuts.userService.unit.service;
 
 import cphbusiness.noInPuts.userService.dto.UserDTO;
 import cphbusiness.noInPuts.userService.model.User;
 import cphbusiness.noInPuts.userService.repository.UserRepository;
+import cphbusiness.noInPuts.userService.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

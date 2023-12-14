@@ -1,5 +1,6 @@
-package cphbusiness.noInPuts.userService.controller;
+package cphbusiness.noInPuts.userService.unit.controller;
 
+import cphbusiness.noInPuts.userService.controller.UserController;
 import cphbusiness.noInPuts.userService.dto.UserDTO;
 import cphbusiness.noInPuts.userService.exception.NotAllowedException;
 import cphbusiness.noInPuts.userService.facade.ServiceFacade;

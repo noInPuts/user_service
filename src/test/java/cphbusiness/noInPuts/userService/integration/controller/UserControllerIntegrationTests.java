@@ -1,4 +1,4 @@
-package cphbusiness.noInPuts.userService.controller;
+package cphbusiness.noInPuts.userService.integration.controller;
 
 import cphbusiness.noInPuts.userService.model.User;
 import cphbusiness.noInPuts.userService.repository.UserRepository;
