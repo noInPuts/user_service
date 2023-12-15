@@ -26,10 +26,14 @@ public class UserServiceTests {
 
     @Test
     public void createUserShouldReturnUserDTO () {
+        // Arrange
         when(userRepository.save(any(User.class))).thenReturn(new User(1L, "name", "email", "phoneNumber", "address"));
         UserDTO userDTO = new UserDTO(1L, "name", "email", "phoneNumber", "address");
+
+        // Act
         UserDTO userDTOPersisted = userService.createUser(new UserDTO(1L, "name", "email", "phoneNumber", "address"));
 
+        // Assert
         assertEquals(userDTO.getId(), userDTOPersisted.getId());
         assertEquals(userDTO.getName(), userDTOPersisted.getName());
         assertEquals(userDTO.getEmail(), userDTOPersisted.getEmail());
@@ -39,10 +43,14 @@ public class UserServiceTests {
 
     @Test
     public void getUserShouldReturnUserDTO() throws Exception {
+        // Arrange
         when(userRepository.findById(any(Long.class))).thenReturn(java.util.Optional.of(new User(1L, "name", "email", "phoneNumber", "address")));
         UserDTO userDTO = new UserDTO(1L, "name", "email", "phoneNumber", "address");
+
+        // Act
         UserDTO userDTOPersisted = userService.getUser(1L);
 
+        // Assert
         assertEquals(userDTO.getId(), userDTOPersisted.getId());
         assertEquals(userDTO.getName(), userDTOPersisted.getName());
         assertEquals(userDTO.getEmail(), userDTOPersisted.getEmail());

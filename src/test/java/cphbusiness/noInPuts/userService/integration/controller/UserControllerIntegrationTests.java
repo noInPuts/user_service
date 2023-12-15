@@ -42,6 +42,7 @@ public class UserControllerIntegrationTests {
 
     @Test
     public void createUser() throws Exception {
+        // Arrange
         // Creating faker object
         Faker faker = new Faker();
 
@@ -61,6 +62,7 @@ public class UserControllerIntegrationTests {
         // Getting cookie
         Cookie cookie = getJwtTokenCookie();
 
+        // Act and Assert
         this.mockMvc.perform(post("/user/create").content(jsonRequestData).contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8").cookie(cookie))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -68,6 +70,7 @@ public class UserControllerIntegrationTests {
 
     @Test
     public void createUserWithWrongId() throws Exception {
+        // Arrange
         // Creating faker object
         Faker faker = new Faker();
 
@@ -99,12 +102,14 @@ public class UserControllerIntegrationTests {
                 .compact();
         Cookie cookie = new Cookie("jwt-token", jwtToken);
 
+        // Act and Assert
         this.mockMvc.perform(post("/user/create").content(jsonRequestData).contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8").cookie(cookie))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void getUser() throws Exception {
+        // Arrange
         Faker faker = new Faker();
         User user = new User(1L, faker.name().fullName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone(), faker.address().fullAddress());
         userRepository.save(user);
@@ -112,6 +117,7 @@ public class UserControllerIntegrationTests {
         // Getting cookie
         Cookie cookie = getJwtTokenCookie();
 
+        // Act and Assert
         this.mockMvc.perform(get("/user").cookie(cookie))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -119,6 +125,7 @@ public class UserControllerIntegrationTests {
     }
 
     private Cookie getJwtTokenCookie() {
+        // Arrange
         // Creating a cookie with a jwt token
         SecretKey key = Keys.hmacShaKeyFor(pKey.getBytes());
         String jwtToken = Jwts.builder()
