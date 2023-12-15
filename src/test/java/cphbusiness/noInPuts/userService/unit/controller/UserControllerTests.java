@@ -49,6 +49,7 @@ public class UserControllerTests {
 
     @Test
     public void createUser() throws Exception {
+        // Arrange
         // Creating faker object
         Faker faker = new Faker();
 
@@ -71,6 +72,7 @@ public class UserControllerTests {
 
         Cookie cookie = getCookie(1L);
 
+        // Act and Assert
         MvcResult result = this.mockMvc.perform(post("/user/create").content(jsonRequestData).contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8").cookie(cookie))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -81,18 +83,21 @@ public class UserControllerTests {
 
     @Test
     public void createUserShouldReturn400BadRequestWhenParsingBadRequest() throws Exception {
+        // Act and Assert
         this.mockMvc.perform(post("/user/create").content("{ \"password\": \"Password1!\" }").contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void createUserShouldReturn415UnsupportedeMediaTypeWhenParsingInvalidJson() throws Exception {
+        // Act and Assert
         this.mockMvc.perform(post("/user/create").content("not json").characterEncoding("UTF-8"))
                 .andExpect(status().isUnsupportedMediaType());
     }
 
     @Test
     public void createUserShouldReturn403ForbiddenWhenParsingInvalidJwtToken() throws Exception {
+        // Arrange
         // Creating faker object
         Faker faker = new Faker();
 
@@ -112,15 +117,18 @@ public class UserControllerTests {
         Cookie cookie = getCookie(2L);
         when(serviceFacade.createUser(any(UserDTO.class), any(String.class))).thenThrow(new NotAllowedException("You are not allowed to create a user with this id"));
 
+        // Act and Assert
         this.mockMvc.perform(post("/user/create").content(jsonRequestData).contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8").cookie(cookie))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void getUser() throws Exception {
+        // Arrange
         when(serviceFacade.getUser(any(String.class))).thenReturn(new UserDTO(1L, "name", "email", "phoneNumber", "address"));
         Cookie cookie = getCookie(1L);
 
+        // Act and Assert
         this.mockMvc.perform(get("/user").cookie(cookie))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -128,6 +136,7 @@ public class UserControllerTests {
     }
 
     private Cookie getCookie(Long id) {
+        // Arrange
         // Creating a cookie with a jwt token
         SecretKey key = Keys.hmacShaKeyFor(pKey.getBytes());
         String jwtToken = Jwts.builder()
